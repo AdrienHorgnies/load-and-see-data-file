@@ -8,6 +8,7 @@ import LoadAndSeeDataFile.service.exceptions.FileFormatException;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,34 +23,34 @@ public class FileToTableParserTest {
     private static final String HAPPY_FLOW = "happy-flow.csv";
 
     @Test(expected = FileNotFoundException.class)
-    public void testParse_nonexistent() throws FileNotFoundException {
+    public void testParse_nonexistent() throws IOException {
         FileToTableParser parser = new FileToTableParser();
 
         parser.parse(testFileHelper.getfile(NONEXISTENT));
     }
 
     @Test(expected = FileFormatException.class)
-    public void testParse_Empty() throws FileNotFoundException {
+    public void testParse_Empty() throws IOException {
         FileToTableParser parser = new FileToTableParser();
 
         parser.parse(testFileHelper.getfile(EMPTY));
     }
 
     @Test(expected = FileFormatException.class)
-    public void testParse_onlyTableName() throws FileNotFoundException {
+    public void testParse_onlyTableName() throws IOException {
         FileToTableParser parser = new FileToTableParser();
 
         parser.parse(testFileHelper.getfile(EMPTY));
     }
 
     @Test
-    public void testParse_noData() throws FileNotFoundException {
+    public void testParse_noData() throws IOException {
         FileToTableParser parser = new FileToTableParser();
 
         Table expected = new Table("eleves", new Column[]{
                 new Column("prenom", SQLDataType.VARCHAR, 50),
                 new Column("nom", SQLDataType.VARCHAR, 100),
-                new Column("age", SQLDataType.VARCHAR)
+                new Column("age", SQLDataType.INTEGER)
         });
 
         Table actual = parser.parse(testFileHelper.getfile(NO_DATA));
@@ -58,7 +59,7 @@ public class FileToTableParserTest {
     }
 
     @Test
-    public void testParse_happyFlow() throws FileNotFoundException {
+    public void testParse_happyFlow() throws IOException {
         FileToTableParser parser = new FileToTableParser();
 
         Table expected = new Table("eleves", new Column[]{
@@ -66,7 +67,6 @@ public class FileToTableParserTest {
                 new Column("nom", SQLDataType.VARCHAR, 100),
                 new Column("age", SQLDataType.VARCHAR)
         });
-        expected.pushData(new String[] {"prenom", "nom", "age"});
         expected.pushData(new String[] {"Ayoyama", "Yuga", "16"});
         expected.pushData(new String[] {"Ashido", "Mino", "17"});
         expected.pushData(new String[] {"Asui", "Tsuyu", "16"});
