@@ -10,4 +10,10 @@ public class Column {
         this.type = type;
         this.size = size;
     }
+
+    public Column(String name, SQLDataType type) {
+        this.name = name;
+        this.type = type;
+        this.size = 0;
+    }
 }

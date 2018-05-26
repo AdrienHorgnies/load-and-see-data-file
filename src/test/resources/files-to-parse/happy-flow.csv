@@ -1,4 +1,4 @@
-student
+eleves
 varchar(50):prenom;varchar(100):nom;integer:age
 Ayoyama;Yuga;16
 Ashido;Mino;17
