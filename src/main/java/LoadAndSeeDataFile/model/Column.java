@@ -1,4 +1,4 @@
-package model;
+package LoadAndSeeDataFile.model;
 
 public class Column {
     private final String name;
