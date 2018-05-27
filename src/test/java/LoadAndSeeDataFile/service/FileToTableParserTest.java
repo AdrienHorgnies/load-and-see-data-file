@@ -41,7 +41,7 @@ public class FileToTableParserTest {
     public void testParse_onlyTableName() throws IOException {
         FileToTableParser parser = new FileToTableParser();
 
-        parser.parse(testFileHelper.getfile(EMPTY));
+        parser.parse(testFileHelper.getfile(ONLY_TABLE_NAME));
     }
 
     @Test
