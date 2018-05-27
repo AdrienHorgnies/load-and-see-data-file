@@ -4,34 +4,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class Table {
+
     private final String name;
     private final Column[] columns;
-    private final List<String[]> data;
+    private final List<Entry> entries;
 
     public Table(String name, Column[] columns) {
         // todo user data should be validated
         this.name = name;
         this.columns = columns;
-        this.data = new ArrayList<>();
+        this.entries = new ArrayList<>();
     }
 
-    public void pushData(String[] data) {
-        // todo user data should always be validated
-        this.data.add(data);
+    public void addEntry(Entry entry) {
+        this.entries.add(entry);
     }
 
     @Override
     public String toString() {
         return "Table{" +
-                "\n    name='" + name + '\'' +
-                ",\n    columns=Column[" +
-                "\n        " + Arrays.stream(columns).map(Column::toString).collect(Collectors.joining(",\n        ")) + "]" +
-                ",\n    data=List[" +
-                "\n        " + data.stream().map(Arrays::toString).collect(Collectors.joining(",\n        ")) + "]" +
-                "\n}";
+                "name='" + name + '\'' +
+                ", columns=" + Arrays.toString(columns) +
+                ", entries=" + entries +
+                '}';
     }
 
     @Override
@@ -41,13 +38,13 @@ public class Table {
         Table table = (Table) o;
         return Objects.equals(name, table.name) &&
                 Arrays.equals(columns, table.columns) &&
-                Objects.equals(data, table.data);
+                Objects.equals(entries, table.entries);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(name, data);
+        int result = Objects.hash(name, entries);
         result = 31 * result + Arrays.hashCode(columns);
         return result;
     }

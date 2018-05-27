@@ -27,7 +27,7 @@ public enum SQLDataType {
 
     /**
      *
-     * @return a regex group, named "type", capturing any char sequence matching one of this enum members
+     * @return a regex group, named "type", capturing any char sequence matching one of this enum members, full lower or upper cases
      */
     public static String getRegexGroup() {
         String collect = Arrays.stream(values())

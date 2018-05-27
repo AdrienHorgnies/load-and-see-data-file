@@ -1,6 +1,7 @@
 package LoadAndSeeDataFile.service;
 
 import LoadAndSeeDataFile.model.Column;
+import LoadAndSeeDataFile.model.Entry;
 import LoadAndSeeDataFile.model.SQLDataType;
 import LoadAndSeeDataFile.model.Table;
 import LoadAndSeeDataFile.service.exceptions.ColumnFormatException;
@@ -47,6 +48,10 @@ public class FileToTableParser {
 
         Table table = new Table(tableName, columns);
 
+        reader.lines()
+                .map(this::parseEntry)
+                .forEach(table::addEntry);
+
         return table;
     }
 
@@ -68,5 +73,11 @@ public class FileToTableParser {
                     return new Column(name, type, size);
                 })
                 .toArray(Column[]::new);
+    }
+
+    private Entry parseEntry(String contentLine) {
+        // todo handle case where type doesn't match
+        // todo handle case where number or items doesn't match columns number
+        return new Entry(contentLine.split(delimiter));
     }
 }
