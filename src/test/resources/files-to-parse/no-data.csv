@@ -1,0 +1,2 @@
+eleves
+varchar(50):prenom;varchar(100):nom;integer:age
