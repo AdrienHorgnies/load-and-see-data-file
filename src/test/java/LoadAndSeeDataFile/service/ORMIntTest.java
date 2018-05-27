@@ -60,11 +60,15 @@ public class ORMIntTest {
 
         while (columnSet.next()) {
             String name = columnSet.getString("COLUMN_NAME");
-            String type = columnSet.getString("SQL_DATA_TYPE");
+
+            int jdbcCode = columnSet.getInt("SQL_DATA_TYPE");
+            SQLDataType type = SQLDataType.from(jdbcCode);
+
             int size = columnSet.getInt("COLUMN_SIZE");
+
             int ordinalPosition = columnSet.getInt("ORDINAL_POSITION");
 
-            columnMap.put(ordinalPosition, new Column(name, SQLDataType.valueOf(type), size));
+            columnMap.put(ordinalPosition, new Column(name, type, size));
         }
 
         Column[] actualColumns = new Column[columnMap.size()];
