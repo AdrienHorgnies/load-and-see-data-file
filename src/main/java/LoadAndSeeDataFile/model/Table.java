@@ -22,6 +22,18 @@ public class Table {
         this.entries.add(entry);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Column[] getColumns() {
+        return columns;
+    }
+
+    public List<Entry> getEntries() {
+        return entries;
+    }
+
     @Override
     public String toString() {
         return "Table{" +

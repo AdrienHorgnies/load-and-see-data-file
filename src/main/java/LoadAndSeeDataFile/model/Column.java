@@ -25,6 +25,18 @@ public class Column {
         this.size = 0;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public SQLDataType getType() {
+        return type;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
     @Override
     public String toString() {
         return "Column{" +
