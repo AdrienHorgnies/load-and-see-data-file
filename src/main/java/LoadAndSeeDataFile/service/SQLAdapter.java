@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class ORM {
+public class SQLAdapter {
 
     public void createTable(Connection connection, Table table) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("CREATE TABLE " + table.getName() + sqlFrom(table.getColumns()) + ";");

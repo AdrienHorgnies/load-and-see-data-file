@@ -13,7 +13,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FileToTableParserTest {
+public class FileParserTest {
 
     private final TestFileHelper testFileHelper = new TestFileHelper("src/test/resources/files-to-parse");
 
@@ -25,28 +25,28 @@ public class FileToTableParserTest {
 
     @Test(expected = FileNotFoundException.class)
     public void testParse_nonexistent() throws IOException {
-        FileToTableParser parser = new FileToTableParser();
+        FileParser parser = new FileParser();
 
         parser.parse(testFileHelper.getfile(NONEXISTENT));
     }
 
     @Test(expected = FileFormatException.class)
     public void testParse_Empty() throws IOException {
-        FileToTableParser parser = new FileToTableParser();
+        FileParser parser = new FileParser();
 
         parser.parse(testFileHelper.getfile(EMPTY));
     }
 
     @Test(expected = FileFormatException.class)
     public void testParse_onlyTableName() throws IOException {
-        FileToTableParser parser = new FileToTableParser();
+        FileParser parser = new FileParser();
 
         parser.parse(testFileHelper.getfile(ONLY_TABLE_NAME));
     }
 
     @Test
     public void testParse_noData() throws IOException {
-        FileToTableParser parser = new FileToTableParser();
+        FileParser parser = new FileParser();
 
         Table expected = new Table("eleves", new Column[]{
                 new Column("prenom", SQLDataType.VARCHAR, 50),
@@ -61,7 +61,7 @@ public class FileToTableParserTest {
 
     @Test
     public void testParse_happyFlow() throws IOException {
-        FileToTableParser parser = new FileToTableParser();
+        FileParser parser = new FileParser();
 
         Table expected = new Table("eleves", new Column[]{
                 new Column("prenom", SQLDataType.VARCHAR, 50),

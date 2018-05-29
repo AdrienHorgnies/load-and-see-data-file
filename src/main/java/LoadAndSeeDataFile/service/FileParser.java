@@ -14,17 +14,17 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 
-public class FileToTableParser {
+public class FileParser {
 
     private final static String DEFAULT_DELIMITER = ";";
 
     private final String delimiter;
 
-    public FileToTableParser(String delimiter) {
+    public FileParser(String delimiter) {
         this.delimiter = delimiter;
     }
 
-    public FileToTableParser() {
+    public FileParser() {
         this(DEFAULT_DELIMITER);
     }
 

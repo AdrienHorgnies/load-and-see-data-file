@@ -14,7 +14,7 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class ORMIntTest {
+public class SQLAdapterIntTest {
 
     private Connection connection;
 
@@ -30,7 +30,7 @@ public class ORMIntTest {
 
     @Test
     public void testCreateTable_onlyStructure() throws SQLException {
-        ORM orm = new ORM();
+        SQLAdapter SQLAdapter = new SQLAdapter();
 
         Table table = new Table("eleves", new Column[]{
                 new Column("prenom", SQLDataType.VARCHAR, 50),
@@ -38,7 +38,7 @@ public class ORMIntTest {
                 new Column("age", SQLDataType.INTEGER)
         });
 
-        orm.createTable(connection, table);
+        SQLAdapter.createTable(connection, table);
 
         // checking result
         DatabaseMetaData metaData = connection.getMetaData();
@@ -84,7 +84,7 @@ public class ORMIntTest {
 
     @Test
     public void testCreateTable_withData() throws SQLException {
-        ORM orm = new ORM();
+        SQLAdapter SQLAdapter = new SQLAdapter();
 
         Table table = new Table("eleves", new Column[]{
                 new Column("prenom", SQLDataType.VARCHAR, 50),
@@ -112,7 +112,7 @@ public class ORMIntTest {
         table.addRecord(new Record(new String[] {"Mineta", "Minoru", "16"}));
         table.addRecord(new Record(new String[] {"Yaoyorozu", "Momo", "20"}));
 
-        orm.createTable(connection, table);
+        SQLAdapter.createTable(connection, table);
 
         String tableName = table.getName().toUpperCase();
 
