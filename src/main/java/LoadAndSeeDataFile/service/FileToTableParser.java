@@ -76,8 +76,7 @@ public class FileToTableParser {
     }
 
     private Entry parseEntry(String contentLine) {
-        // todo handle case where type doesn't match
-        // todo handle case where number or items doesn't match columns number
+        // todo it shouldn't be possible to create an Entry independently like that as its formatting depends of the Table containing it.
         return new Entry(contentLine.split(delimiter));
     }
 }

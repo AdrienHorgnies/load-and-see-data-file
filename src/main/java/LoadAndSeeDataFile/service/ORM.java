@@ -19,6 +19,9 @@ public class ORM {
         if (rowCount != 0) {
             throw new SQLException("DDL query modified " + rowCount + " lines when it should be 0");
         }
+
+        // todo insert entries using the preparedStatement : "INSERT INTO tableName VALUES (?,?,?)
+        // todo values should be formatted depending their type which is available from Table
     }
 
     private String sqlFrom(Column[] columns) {

@@ -12,9 +12,12 @@ public class Table {
     private final List<Entry> entries;
 
     public Table(String name, Column[] columns) {
-        // todo user data should be validated
+        // todo check that name is a valid MySQL table name.
         this.name = name;
+        // todo check that column name is a valid MySQL name.
         this.columns = columns;
+        // todo check that entries are valid regarding to their corresponding type
+        // todo check that entries number of cells correspond to their type
         this.entries = new ArrayList<>();
     }
 

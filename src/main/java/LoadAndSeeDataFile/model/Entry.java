@@ -2,6 +2,7 @@ package LoadAndSeeDataFile.model;
 
 import java.util.Arrays;
 
+// todo rename this class "Record" as it is a more widely used word
 public class Entry {
 
     private String[] data;
