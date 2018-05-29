@@ -20,7 +20,7 @@ public class ORM {
             throw new SQLException("DDL query modified " + rowCount + " lines when it should be 0");
         }
 
-        // todo insert entries using the preparedStatement : "INSERT INTO tableName VALUES (?,?,?)
+        // todo insert Record's using the preparedStatement : "INSERT INTO tableName VALUES (?,?,?)
         // todo values should be formatted depending their type which is available from Table
     }
 

@@ -9,20 +9,20 @@ public class Table {
 
     private final String name;
     private final Column[] columns;
-    private final List<Entry> entries;
+    private final List<Record> records;
 
     public Table(String name, Column[] columns) {
         // todo check that name is a valid MySQL table name.
         this.name = name;
         // todo check that column name is a valid MySQL name.
         this.columns = columns;
-        // todo check that entries are valid regarding to their corresponding type
-        // todo check that entries number of cells correspond to their type
-        this.entries = new ArrayList<>();
+        // todo check that records are valid regarding to their corresponding type
+        // todo check that records number of cells correspond to their type
+        this.records = new ArrayList<>();
     }
 
-    public void addEntry(Entry entry) {
-        this.entries.add(entry);
+    public void addRecord(Record record) {
+        this.records.add(record);
     }
 
     public String getName() {
@@ -33,8 +33,8 @@ public class Table {
         return columns;
     }
 
-    public List<Entry> getEntries() {
-        return entries;
+    public List<Record> getRecords() {
+        return records;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class Table {
         return "Table{" +
                 "name='" + name + '\'' +
                 ", columns=" + Arrays.toString(columns) +
-                ", entries=" + entries +
+                ", records=" + records +
                 '}';
     }
 
@@ -53,13 +53,13 @@ public class Table {
         Table table = (Table) o;
         return Objects.equals(name, table.name) &&
                 Arrays.equals(columns, table.columns) &&
-                Objects.equals(entries, table.entries);
+                Objects.equals(records, table.records);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(name, entries);
+        int result = Objects.hash(name, records);
         result = 31 * result + Arrays.hashCode(columns);
         return result;
     }

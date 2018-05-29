@@ -2,7 +2,7 @@ package LoadAndSeeDataFile.service;
 
 import LoadAndSeeDataFile.TestFileHelper;
 import LoadAndSeeDataFile.model.Column;
-import LoadAndSeeDataFile.model.Entry;
+import LoadAndSeeDataFile.model.Record;
 import LoadAndSeeDataFile.model.SQLDataType;
 import LoadAndSeeDataFile.model.Table;
 import LoadAndSeeDataFile.service.exceptions.FileFormatException;
@@ -68,26 +68,26 @@ public class FileToTableParserTest {
                 new Column("nom", SQLDataType.VARCHAR, 100),
                 new Column("age", SQLDataType.INTEGER)
         });
-        expected.addEntry(new Entry(new String[] {"Ayoyama", "Yuga", "16"}));
-        expected.addEntry(new Entry(new String[] {"Ashido", "Mino", "17"}));
-        expected.addEntry(new Entry(new String[] {"Asui", "Tsuyu", "16"}));
-        expected.addEntry(new Entry(new String[] {"Iida", "Tenya", "17"}));
-        expected.addEntry(new Entry(new String[] {"Uraraka", "Ochaco", "15"}));
-        expected.addEntry(new Entry(new String[] {"Ojiro", "Mashirao", "14"}));
-        expected.addEntry(new Entry(new String[] {"Kaminari", "Denki", "16"}));
-        expected.addEntry(new Entry(new String[] {"Kirishima", "Eijiro", "18"}));
-        expected.addEntry(new Entry(new String[] {"Koda", "Koji", "11"}));
-        expected.addEntry(new Entry(new String[] {"Sato", "Rikido", "13"}));
-        expected.addEntry(new Entry(new String[] {"Shoji", "Mezo", "12"}));
-        expected.addEntry(new Entry(new String[] {"Jiro", "Kyoka", "14"}));
-        expected.addEntry(new Entry(new String[] {"Sero", "Hanta", "16"}));
-        expected.addEntry(new Entry(new String[] {"Tokoyami", "Fumikage", "19"}));
-        expected.addEntry(new Entry(new String[] {"Todoroki", "Shoto", "17"}));
-        expected.addEntry(new Entry(new String[] {"Hagakure", "Toru", "17"}));
-        expected.addEntry(new Entry(new String[] {"Bakugo", "Katsuki", "17"}));
-        expected.addEntry(new Entry(new String[] {"Midoryiya", "Izuku", "15"}));
-        expected.addEntry(new Entry(new String[] {"Mineta", "Minoru", "16"}));
-        expected.addEntry(new Entry(new String[] {"Yaoyorozu", "Momo", "20"}));
+        expected.addRecord(new Record(new String[] {"Ayoyama", "Yuga", "16"}));
+        expected.addRecord(new Record(new String[] {"Ashido", "Mino", "17"}));
+        expected.addRecord(new Record(new String[] {"Asui", "Tsuyu", "16"}));
+        expected.addRecord(new Record(new String[] {"Iida", "Tenya", "17"}));
+        expected.addRecord(new Record(new String[] {"Uraraka", "Ochaco", "15"}));
+        expected.addRecord(new Record(new String[] {"Ojiro", "Mashirao", "14"}));
+        expected.addRecord(new Record(new String[] {"Kaminari", "Denki", "16"}));
+        expected.addRecord(new Record(new String[] {"Kirishima", "Eijiro", "18"}));
+        expected.addRecord(new Record(new String[] {"Koda", "Koji", "11"}));
+        expected.addRecord(new Record(new String[] {"Sato", "Rikido", "13"}));
+        expected.addRecord(new Record(new String[] {"Shoji", "Mezo", "12"}));
+        expected.addRecord(new Record(new String[] {"Jiro", "Kyoka", "14"}));
+        expected.addRecord(new Record(new String[] {"Sero", "Hanta", "16"}));
+        expected.addRecord(new Record(new String[] {"Tokoyami", "Fumikage", "19"}));
+        expected.addRecord(new Record(new String[] {"Todoroki", "Shoto", "17"}));
+        expected.addRecord(new Record(new String[] {"Hagakure", "Toru", "17"}));
+        expected.addRecord(new Record(new String[] {"Bakugo", "Katsuki", "17"}));
+        expected.addRecord(new Record(new String[] {"Midoryiya", "Izuku", "15"}));
+        expected.addRecord(new Record(new String[] {"Mineta", "Minoru", "16"}));
+        expected.addRecord(new Record(new String[] {"Yaoyorozu", "Momo", "20"}));
 
         Table actual = parser.parse(testFileHelper.getfile(HAPPY_FLOW));
 

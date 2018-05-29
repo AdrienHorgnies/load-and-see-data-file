@@ -1,7 +1,7 @@
 package LoadAndSeeDataFile.service;
 
 import LoadAndSeeDataFile.model.Column;
-import LoadAndSeeDataFile.model.Entry;
+import LoadAndSeeDataFile.model.Record;
 import LoadAndSeeDataFile.model.SQLDataType;
 import LoadAndSeeDataFile.model.Table;
 import org.junit.After;
@@ -25,7 +25,7 @@ public class ORMIntTest {
 
     @After
     public void after() throws SQLException {
-        connection.createStatement().execute("SHUTDOWN");
+        connection.createStatement().execute("SHUTDOWN;");
     }
 
     @Test
@@ -91,26 +91,26 @@ public class ORMIntTest {
                 new Column("nom", SQLDataType.VARCHAR, 100),
                 new Column("age", SQLDataType.INTEGER)
         });
-        table.addEntry(new Entry(new String[] {"Ayoyama", "Yuga", "16"}));
-        table.addEntry(new Entry(new String[] {"Ashido", "Mino", "17"}));
-        table.addEntry(new Entry(new String[] {"Asui", "Tsuyu", "16"}));
-        table.addEntry(new Entry(new String[] {"Iida", "Tenya", "17"}));
-        table.addEntry(new Entry(new String[] {"Uraraka", "Ochaco", "15"}));
-        table.addEntry(new Entry(new String[] {"Ojiro", "Mashirao", "14"}));
-        table.addEntry(new Entry(new String[] {"Kaminari", "Denki", "16"}));
-        table.addEntry(new Entry(new String[] {"Kirishima", "Eijiro", "18"}));
-        table.addEntry(new Entry(new String[] {"Koda", "Koji", "11"}));
-        table.addEntry(new Entry(new String[] {"Sato", "Rikido", "13"}));
-        table.addEntry(new Entry(new String[] {"Shoji", "Mezo", "12"}));
-        table.addEntry(new Entry(new String[] {"Jiro", "Kyoka", "14"}));
-        table.addEntry(new Entry(new String[] {"Sero", "Hanta", "16"}));
-        table.addEntry(new Entry(new String[] {"Tokoyami", "Fumikage", "19"}));
-        table.addEntry(new Entry(new String[] {"Todoroki", "Shoto", "17"}));
-        table.addEntry(new Entry(new String[] {"Hagakure", "Toru", "17"}));
-        table.addEntry(new Entry(new String[] {"Bakugo", "Katsuki", "17"}));
-        table.addEntry(new Entry(new String[] {"Midoryiya", "Izuku", "15"}));
-        table.addEntry(new Entry(new String[] {"Mineta", "Minoru", "16"}));
-        table.addEntry(new Entry(new String[] {"Yaoyorozu", "Momo", "20"}));
+        table.addRecord(new Record(new String[] {"Ayoyama", "Yuga", "16"}));
+        table.addRecord(new Record(new String[] {"Ashido", "Mino", "17"}));
+        table.addRecord(new Record(new String[] {"Asui", "Tsuyu", "16"}));
+        table.addRecord(new Record(new String[] {"Iida", "Tenya", "17"}));
+        table.addRecord(new Record(new String[] {"Uraraka", "Ochaco", "15"}));
+        table.addRecord(new Record(new String[] {"Ojiro", "Mashirao", "14"}));
+        table.addRecord(new Record(new String[] {"Kaminari", "Denki", "16"}));
+        table.addRecord(new Record(new String[] {"Kirishima", "Eijiro", "18"}));
+        table.addRecord(new Record(new String[] {"Koda", "Koji", "11"}));
+        table.addRecord(new Record(new String[] {"Sato", "Rikido", "13"}));
+        table.addRecord(new Record(new String[] {"Shoji", "Mezo", "12"}));
+        table.addRecord(new Record(new String[] {"Jiro", "Kyoka", "14"}));
+        table.addRecord(new Record(new String[] {"Sero", "Hanta", "16"}));
+        table.addRecord(new Record(new String[] {"Tokoyami", "Fumikage", "19"}));
+        table.addRecord(new Record(new String[] {"Todoroki", "Shoto", "17"}));
+        table.addRecord(new Record(new String[] {"Hagakure", "Toru", "17"}));
+        table.addRecord(new Record(new String[] {"Bakugo", "Katsuki", "17"}));
+        table.addRecord(new Record(new String[] {"Midoryiya", "Izuku", "15"}));
+        table.addRecord(new Record(new String[] {"Mineta", "Minoru", "16"}));
+        table.addRecord(new Record(new String[] {"Yaoyorozu", "Momo", "20"}));
 
         orm.createTable(connection, table);
 
@@ -118,15 +118,15 @@ public class ORMIntTest {
 
         ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM " + tableName);
 
-        List<Entry> actual = new ArrayList<>();
+        List<Record> actual = new ArrayList<>();
         while (resultSet.next()) {
-            actual.add(new Entry(new String[]{
+            actual.add(new Record(new String[]{
                     resultSet.getString(0),
                     resultSet.getString(1),
                     resultSet.getString(2)
             }));
         }
 
-        assertThat(actual).isEqualTo(table.getEntries());
+        assertThat(actual).isEqualTo(table.getRecords());
     }
 }
