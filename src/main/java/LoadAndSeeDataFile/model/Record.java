@@ -10,6 +10,10 @@ public class Record {
         this.data = data;
     }
 
+    public String getData(int idx) {
+        return data[idx];
+    }
+
     @Override
     public String toString() {
         return "Record{" +

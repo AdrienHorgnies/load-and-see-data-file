@@ -121,9 +121,9 @@ public class SQLAdapterIntTest {
         List<Record> actual = new ArrayList<>();
         while (resultSet.next()) {
             actual.add(new Record(new String[]{
-                    resultSet.getString(0),
                     resultSet.getString(1),
-                    resultSet.getString(2)
+                    resultSet.getString(2),
+                    resultSet.getString(3)
             }));
         }
 
