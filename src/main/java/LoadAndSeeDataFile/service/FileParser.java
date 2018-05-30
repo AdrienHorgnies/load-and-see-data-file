@@ -1,7 +1,7 @@
 package LoadAndSeeDataFile.service;
 
 import LoadAndSeeDataFile.model.Column;
-import LoadAndSeeDataFile.model.Entry;
+import LoadAndSeeDataFile.model.Record;
 import LoadAndSeeDataFile.model.SQLDataType;
 import LoadAndSeeDataFile.model.Table;
 import LoadAndSeeDataFile.service.exceptions.ColumnFormatException;
@@ -12,20 +12,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.regex.Matcher;
 
-public class FileToTableParser {
+public class FileParser {
 
     private final static String DEFAULT_DELIMITER = ";";
 
     private final String delimiter;
 
-    public FileToTableParser(String delimiter) {
+    public FileParser(String delimiter) {
         this.delimiter = delimiter;
     }
 
-    public FileToTableParser() {
+    public FileParser() {
         this(DEFAULT_DELIMITER);
     }
 
@@ -49,8 +48,8 @@ public class FileToTableParser {
         Table table = new Table(tableName, columns);
 
         reader.lines()
-                .map(this::parseEntry)
-                .forEach(table::addEntry);
+                .map(this::parseRecord)
+                .forEach(table::addRecord);
 
         return table;
     }
@@ -68,16 +67,20 @@ public class FileToTableParser {
 
                     String name = matcher.group("name");
                     SQLDataType type = SQLDataType.valueOf(matcher.group("type").toUpperCase());
-                    int size = Integer.parseInt(Optional.ofNullable(matcher.group("size")).orElse("0"));
+                    String sizeStr = matcher.group("size");
+
+                    if (sizeStr == null) {
+                        return new Column(name, type);
+                    }
+                    int size = Integer.parseInt(sizeStr);
 
                     return new Column(name, type, size);
                 })
                 .toArray(Column[]::new);
     }
 
-    private Entry parseEntry(String contentLine) {
-        // todo handle case where type doesn't match
-        // todo handle case where number or items doesn't match columns number
-        return new Entry(contentLine.split(delimiter));
+    private Record parseRecord(String contentLine) {
+        // todo it shouldn't be possible to create a Record independently like that as its formatting depends of the Table containing it.
+        return new Record(contentLine.split(delimiter));
     }
 }

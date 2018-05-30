@@ -22,7 +22,19 @@ public class Column {
     public Column(String name, SQLDataType type) {
         this.name = name;
         this.type = type;
-        this.size = 0;
+        this.size = type.DEFAULT_SIZE;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public SQLDataType getType() {
+        return type;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     @Override

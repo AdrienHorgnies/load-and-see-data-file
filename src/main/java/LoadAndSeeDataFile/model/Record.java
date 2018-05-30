@@ -2,17 +2,21 @@ package LoadAndSeeDataFile.model;
 
 import java.util.Arrays;
 
-public class Entry {
+public class Record {
 
     private String[] data;
 
-    public Entry(String[] data) {
+    public Record(String[] data) {
         this.data = data;
+    }
+
+    public String getData(int idx) {
+        return data[idx];
     }
 
     @Override
     public String toString() {
-        return "Entry{" +
+        return "Record{" +
                 "data=" + Arrays.toString(data) +
                 '}';
     }
@@ -20,9 +24,9 @@ public class Entry {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Entry)) return false;
-        Entry entry = (Entry) o;
-        return Arrays.equals(data, entry.data);
+        if (!(o instanceof Record)) return false;
+        Record record = (Record) o;
+        return Arrays.equals(data, record.data);
     }
 
     @Override
