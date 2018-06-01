@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 public class SQLAdapter {
 
     public void createTable(Connection connection, Table table) throws SQLException {
-        PreparedStatement ddlStatement = connection.prepareStatement("CREATE TABLE " + table.getName() + DDLFragment(table.getColumns()) + ";");
+        PreparedStatement ddlStatement = connection.prepareStatement("CREATE TABLE " + table.getName() + ddlFragment(table.getColumns()) + ";");
 
         int rowCount = ddlStatement.executeUpdate();
 
@@ -28,7 +28,7 @@ public class SQLAdapter {
 
         int tableWidth = table.getColumns().length;
         int recordCount = table.getRecords().size();
-        PreparedStatement dmlStatement = connection.prepareStatement(insertQueryFrom(table.getName(), tableWidth, recordCount));
+        PreparedStatement dmlStatement = connection.prepareStatement(insertQueryFrom(table));
 
         int totalCellCount = recordCount * tableWidth;
         IntStream.range(0, totalCellCount)
@@ -43,23 +43,23 @@ public class SQLAdapter {
         dmlStatement.executeUpdate();
     }
 
-    private String DDLFragment(Column[] columns) {
+    private String ddlFragment(Column[] columns) {
         return "(" + Arrays.stream(columns)
-                .map(this::DDLFragment)
+                .map(this::ddlFragment)
                 .collect(Collectors.joining(","))
                 + ")";
     }
 
-    private String DDLFragment(Column column) {
+    private String ddlFragment(Column column) {
         return column.getName() + " " + column.getType() + (column.getSize() > 0 ? "(" + column.getSize() + ")" : "");
     }
 
-    private String insertQueryFrom(String tableName, int columnCount, int recordCount) {
-        String baseQuery = "INSERT INTO " + tableName + " VALUES ";
+    private String insertQueryFrom(Table table) {
+        String baseQuery = "INSERT INTO " + table.getName() + " VALUES ";
 
-        String placeHolderUnit = "(" + String.join(",", Collections.nCopies(columnCount, "?")) + ")";
+        String placeHolderUnit = "(" + String.join(",", Collections.nCopies(table.getColumns().length, "?")) + ")";
 
-        String placeHolders = String.join(",", Collections.nCopies(recordCount, placeHolderUnit));
+        String placeHolders = String.join(",", Collections.nCopies(table.getRecords().size(), placeHolderUnit));
 
         return baseQuery + placeHolders;
     }
