@@ -1,11 +1,11 @@
 package LoadAndSeeDataFile.service;
 
 import LoadAndSeeDataFile.model.Column;
+import LoadAndSeeDataFile.model.Record;
+import LoadAndSeeDataFile.model.SQLDataType;
 import LoadAndSeeDataFile.model.Table;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -43,8 +43,30 @@ public class SQLAdapter {
         dmlStatement.executeUpdate();
     }
 
-    public Table retrieveTable(Connection connection, String tableName) {
-        return null;
+    public Table retrieveTable(Connection connection, String tableName) throws SQLException {
+        ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM " + tableName);
+
+        ResultSetMetaData metaData = resultSet.getMetaData();
+
+        Column[] columns = new Column[metaData.getColumnCount()];
+        for (int idx = 1; idx <= metaData.getColumnCount(); idx++) {
+            String columnName = metaData.getColumnName(idx);
+            SQLDataType type = SQLDataType.from(metaData.getColumnType(idx));
+            int size = metaData.getPrecision(idx);
+            columns[idx - 1] = new Column(columnName, type, size);
+        }
+
+        Table table = new Table(tableName, columns);
+
+        while (resultSet.next()) {
+            String[] data = new String[columns.length];
+            for (int idx = 0; idx < columns.length; idx++) {
+                data[idx] = resultSet.getString(idx + 1);
+            }
+            table.addRecord(new Record(data));
+        }
+
+        return table;
     }
 
     private String ddlFragment(Column[] columns) {
