@@ -43,6 +43,10 @@ public class SQLAdapter {
         dmlStatement.executeUpdate();
     }
 
+    public Table retrieveTable(Connection connection, String tableName) {
+        return null;
+    }
+
     private String ddlFragment(Column[] columns) {
         return "(" + Arrays.stream(columns)
                 .map(this::ddlFragment)

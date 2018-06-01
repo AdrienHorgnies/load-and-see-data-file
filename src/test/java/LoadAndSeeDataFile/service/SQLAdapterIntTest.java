@@ -30,7 +30,7 @@ public class SQLAdapterIntTest {
 
     @Test
     public void testCreateTable_onlyStructure() throws SQLException {
-        SQLAdapter SQLAdapter = new SQLAdapter();
+        SQLAdapter sqlAdapter = new SQLAdapter();
 
         Table table = new Table("eleves", new Column[]{
                 new Column("prenom", SQLDataType.VARCHAR, 50),
@@ -38,7 +38,7 @@ public class SQLAdapterIntTest {
                 new Column("age", SQLDataType.INTEGER)
         });
 
-        SQLAdapter.createTable(connection, table);
+        sqlAdapter.createTable(connection, table);
 
         // checking result
         DatabaseMetaData metaData = connection.getMetaData();
@@ -84,7 +84,7 @@ public class SQLAdapterIntTest {
 
     @Test
     public void testCreateTable_withData() throws SQLException {
-        SQLAdapter SQLAdapter = new SQLAdapter();
+        SQLAdapter sqlAdapter = new SQLAdapter();
 
         Table table = new Table("eleves", new Column[]{
                 new Column("prenom", SQLDataType.VARCHAR, 50),
@@ -112,7 +112,7 @@ public class SQLAdapterIntTest {
         table.addRecord(new Record(new String[] {"Mineta", "Minoru", "16"}));
         table.addRecord(new Record(new String[] {"Yaoyorozu", "Momo", "20"}));
 
-        SQLAdapter.createTable(connection, table);
+        sqlAdapter.createTable(connection, table);
 
         String tableName = table.getName().toUpperCase();
 
@@ -128,5 +128,36 @@ public class SQLAdapterIntTest {
         }
 
         assertThat(actual).isEqualTo(table.getRecords());
+    }
+
+    @Test
+    public void testRetrieveTable() throws SQLException {
+        SQLAdapter sqlAdapter = new SQLAdapter();
+
+        PreparedStatement preparedStatement = connection.prepareStatement("CREATE  TABLE STUDENT (" +
+                "FIRSTNAME VARCHAR(50)," +
+                "LASTNAME VARCHAR(100)," +
+                "AGE INTEGER" +
+                ")");
+
+        preparedStatement.executeUpdate();
+
+        connection.createStatement().executeUpdate("INSERT INTO STUDENT VALUES " +
+                "(\"Ayoyama\", \"Yuga\", \"16\")," +
+                "(\"Ashido\", \"Mino\", \"17\")," +
+                "(\"Asui\", \"Tsuyu\", \"16\")");
+
+        Table expected = new Table("STUDENT", new Column[]{
+                new Column("FIRSTNAME", SQLDataType.VARCHAR, 50),
+                new Column("LASTNAME", SQLDataType.VARCHAR, 100),
+                new Column("AGE", SQLDataType.INTEGER)
+        });
+        expected.addRecord(new Record(new String[]{"Ayoyama", "Yuga", "16"}));
+        expected.addRecord(new Record(new String[]{"Ashido", "Mino", "17"}));
+        expected.addRecord(new Record(new String[]{"Asui", "Tsuyu", "16"}));
+
+        Table actual = sqlAdapter.retrieveTable(connection, "STUDENT");
+
+        assertThat(actual).isEqualTo(expected);
     }
 }
