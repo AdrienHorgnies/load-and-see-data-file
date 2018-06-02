@@ -9,7 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -30,61 +31,45 @@ public class SQLAdapterIntTest {
 
     @Test
     public void testCreateTable_onlyStructure() throws SQLException {
-        SQLAdapter SQLAdapter = new SQLAdapter();
+        SQLAdapter sqlAdapter = new SQLAdapter();
 
-        Table table = new Table("eleves", new Column[]{
-                new Column("prenom", SQLDataType.VARCHAR, 50),
-                new Column("nom", SQLDataType.VARCHAR, 100),
-                new Column("age", SQLDataType.INTEGER)
-        });
+        Column[] expectedColumns = {
+                new Column("FIRSTNAME", SQLDataType.VARCHAR, 50),
+                new Column("LASTNAME", SQLDataType.VARCHAR, 100),
+                new Column("AGE", SQLDataType.INTEGER)
+        };
+        Table table = new Table("STUDENT", expectedColumns);
 
-        SQLAdapter.createTable(connection, table);
+        sqlAdapter.createTable(connection, table);
 
         // checking result
-        DatabaseMetaData metaData = connection.getMetaData();
-        // h2 makes everything from the structure uppercase
-        String expectedTableName = table.getName().toUpperCase();
+        DatabaseMetaData actualMetaData = connection.getMetaData();
 
-        ResultSet tableSet = metaData.getTables(null, null, expectedTableName, null);
+        ResultSet actualTableMetaData = actualMetaData.getTables(null, null, table.getName(), null);
 
-        assertTrue(tableSet.next());
+        assertTrue(actualTableMetaData.next());
 
-        Column[] expectedColumns = Arrays.stream(table.getColumns())
-                // h2 makes everything from the structure uppercase
-                .map(col -> new Column(col.getName().toUpperCase(), col.getType(), col.getSize()))
-                .toArray(Column[]::new);
+        ResultSet actualColumnsSet = actualMetaData.getColumns(null, null, table.getName(), null);
 
-        ResultSet columnSet = metaData.getColumns(null, null, expectedTableName, null);
+        List<Column> columnList = new ArrayList<>();
+        while (actualColumnsSet.next()) {
+            String name = actualColumnsSet.getString("COLUMN_NAME");
 
-        Map<Integer, Column> columnMap = new HashMap<>();
-
-        while (columnSet.next()) {
-            String name = columnSet.getString("COLUMN_NAME");
-
-            int jdbcCode = columnSet.getInt("SQL_DATA_TYPE");
+            int jdbcCode = actualColumnsSet.getInt("SQL_DATA_TYPE");
             SQLDataType type = SQLDataType.from(jdbcCode);
 
-            int size = columnSet.getInt("COLUMN_SIZE");
+            int size = actualColumnsSet.getInt("COLUMN_SIZE");
 
-            int ordinalPosition = columnSet.getInt("ORDINAL_POSITION");
-
-            columnMap.put(ordinalPosition, new Column(name, type, size));
+            columnList.add(new Column(name, type, size));
         }
-
-        Column[] actualColumns = new Column[columnMap.size()];
-        columnMap.forEach((key, value) -> {
-            // SQL index starts at one...
-            int idx = key - 1;
-
-            actualColumns[idx] = value;
-        });
+        Column[] actualColumns = columnList.toArray(new Column[columnList.size()]);
 
         assertThat(actualColumns).isEqualTo(expectedColumns);
     }
 
     @Test
     public void testCreateTable_withData() throws SQLException {
-        SQLAdapter SQLAdapter = new SQLAdapter();
+        SQLAdapter sqlAdapter = new SQLAdapter();
 
         Table table = new Table("eleves", new Column[]{
                 new Column("prenom", SQLDataType.VARCHAR, 50),
@@ -112,7 +97,7 @@ public class SQLAdapterIntTest {
         table.addRecord(new Record(new String[] {"Mineta", "Minoru", "16"}));
         table.addRecord(new Record(new String[] {"Yaoyorozu", "Momo", "20"}));
 
-        SQLAdapter.createTable(connection, table);
+        sqlAdapter.createTable(connection, table);
 
         String tableName = table.getName().toUpperCase();
 
@@ -128,5 +113,43 @@ public class SQLAdapterIntTest {
         }
 
         assertThat(actual).isEqualTo(table.getRecords());
+    }
+
+    @Test
+    public void testRetrieveTable() throws SQLException {
+        SQLAdapter sqlAdapter = new SQLAdapter();
+
+        PreparedStatement ddlStatement = connection.prepareStatement("CREATE  TABLE STUDENT (" +
+                "FIRSTNAME VARCHAR(50)," +
+                "LASTNAME VARCHAR(100)," +
+                "AGE INTEGER" +
+                ")");
+
+        ddlStatement.executeUpdate();
+
+        PreparedStatement dmlStatement = connection.prepareStatement("INSERT INTO STUDENT (FIRSTNAME, LASTNAME, AGE) VALUES (?,?,?),(?,?,?),(?,?,?)");
+        dmlStatement.setString(1, "Ayoyama");
+        dmlStatement.setString(2, "Yuga");
+        dmlStatement.setString(3, "16");
+        dmlStatement.setString(4, "Ashido");
+        dmlStatement.setString(5, "Mino");
+        dmlStatement.setString(6, "17");
+        dmlStatement.setString(7, "Asui");
+        dmlStatement.setString(8, "Tsuyu");
+        dmlStatement.setString(9, "16");
+        dmlStatement.executeUpdate();
+
+        Table expected = new Table("STUDENT", new Column[]{
+                new Column("FIRSTNAME", SQLDataType.VARCHAR, 50),
+                new Column("LASTNAME", SQLDataType.VARCHAR, 100),
+                new Column("AGE", SQLDataType.INTEGER)
+        });
+        expected.addRecord(new Record(new String[]{"Ayoyama", "Yuga", "16"}));
+        expected.addRecord(new Record(new String[]{"Ashido", "Mino", "17"}));
+        expected.addRecord(new Record(new String[]{"Asui", "Tsuyu", "16"}));
+
+        Table actual = sqlAdapter.retrieveTable(connection, "STUDENT");
+
+        assertThat(actual).isEqualTo(expected);
     }
 }
