@@ -10,10 +10,11 @@ public class LoadAndSeeDataFileView {
     private final String PICK_FILE_BTN_TXT = "Choose file";
     private final String TABLE_NAME_LABEL_TXT = "Please select a database file";
 
-    private final JButton fileBtn;
+    public final JFrame window;
+    public final JButton fileBtn;
 
     public LoadAndSeeDataFileView() {
-        JFrame window = window(APPLICATION_TITLE);
+        window = window(APPLICATION_TITLE);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         fileBtn = new JButton(PICK_FILE_BTN_TXT);
@@ -27,9 +28,4 @@ public class LoadAndSeeDataFileView {
 
         window.setVisible(true);
     }
-
-    public JButton getFileBtn() {
-        return fileBtn;
-    }
-
 }

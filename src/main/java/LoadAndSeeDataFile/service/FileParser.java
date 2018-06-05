@@ -16,16 +16,12 @@ import java.util.regex.Matcher;
 
 public class FileParser {
 
-    private final static String DEFAULT_DELIMITER = ";";
+    private static final String DEFAULT_DELIMITER = ";";
 
     private final String delimiter;
 
-    public FileParser(String delimiter) {
-        this.delimiter = delimiter;
-    }
-
     public FileParser() {
-        this(DEFAULT_DELIMITER);
+        this.delimiter = DEFAULT_DELIMITER;
     }
 
     public Table parse(File file) throws IOException {
