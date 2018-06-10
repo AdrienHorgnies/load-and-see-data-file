@@ -27,7 +27,7 @@ public enum SQLDataType {
     TIME(92, 6),
     TIMESTAMP(93, 23);
 
-    public final int JDBC_CODE;
+    private final int JDBC_CODE;
     public final int DEFAULT_SIZE;
 
     SQLDataType(int JDBC_CODE, int DEFAULT_SIZE) {
