@@ -6,11 +6,13 @@ import static LoadAndSeeDataFile.view.LoadAndSeeDataFileViewStyle.*;
 
 public class LoadAndSeeDataFileView {
     // todo put all this in a configuration file.
-    private final String APPLICATION_TITLE = "Load and see data file";
-    private final String PICK_FILE_BTN_TXT = "Choose file";
-    private final String TABLE_NAME_LABEL_TXT = "Please select a database file";
+    public static final String TABLE_INDICATOR = "table : ";
+    public static final String APPLICATION_TITLE = "Load and see data file";
+    public static final String PICK_FILE_BTN_TXT = "Choose file";
+    public static final String TABLE_NAME_LABEL_TXT = "Please select a database file";
 
     public final JFrame window;
+    public final JLabel tableLabel;
     public final JButton fileBtn;
     public final JTable tableHolder;
 
@@ -21,12 +23,17 @@ public class LoadAndSeeDataFileView {
         fileBtn = new JButton(PICK_FILE_BTN_TXT);
         window.add(fileBtn, fileBtnGbc());
 
-        JLabel tableLabel = new JLabel(TABLE_NAME_LABEL_TXT);
+        tableLabel = new JLabel(TABLE_NAME_LABEL_TXT);
         window.add(tableLabel, tableLabelGbc());
 
         tableHolder = new JTable();
         window.add(tableHolder, dataTableGbc());
 
         window.setVisible(true);
+    }
+
+    public void displayError(String title, String message) {
+        JOptionPane.showMessageDialog(this.window, message, title, JOptionPane.ERROR_MESSAGE);
+
     }
 }
