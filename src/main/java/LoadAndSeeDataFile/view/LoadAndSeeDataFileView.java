@@ -27,7 +27,7 @@ public class LoadAndSeeDataFileView {
         window.add(tableLabel, tableLabelGbc());
 
         tableHolder = new JTable();
-        window.add(tableHolder, dataTableGbc());
+        window.add(new JScrollPane(tableHolder), dataTableGbc());
 
         window.setVisible(true);
     }
