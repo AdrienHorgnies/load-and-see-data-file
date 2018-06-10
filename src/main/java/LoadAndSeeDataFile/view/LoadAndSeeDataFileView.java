@@ -12,6 +12,7 @@ public class LoadAndSeeDataFileView {
 
     public final JFrame window;
     public final JButton fileBtn;
+    public final JTable tableHolder;
 
     public LoadAndSeeDataFileView() {
         window = window(APPLICATION_TITLE);
@@ -23,8 +24,8 @@ public class LoadAndSeeDataFileView {
         JLabel tableLabel = new JLabel(TABLE_NAME_LABEL_TXT);
         window.add(tableLabel, tableLabelGbc());
 
-        JTable dataTable = new JTable();
-        window.add(dataTable, dataTableGbc());
+        tableHolder = new JTable();
+        window.add(tableHolder, dataTableGbc());
 
         window.setVisible(true);
     }

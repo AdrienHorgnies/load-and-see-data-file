@@ -42,8 +42,8 @@ public class LoadAndSeeDataFileCtrl implements ActionListener {
 
             try {
                 Table table = fileParser.parse(file);
-                // todo inform the view the model changed
-                System.out.println("WE GOT THE DAMN TABLE : " + table.toString());
+                // todo it doesn't display a header, did I mess up or is it not a feature ?
+                managedView.tableHolder.setModel(table);
             } catch (IOException e) {
                 // todo inform view something went wrong
                 e.printStackTrace();

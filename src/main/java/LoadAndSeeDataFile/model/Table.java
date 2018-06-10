@@ -1,11 +1,13 @@
 package LoadAndSeeDataFile.model;
 
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Table {
+public class Table implements TableModel {
 
     private final String name;
     private final Column[] columns;
@@ -62,5 +64,50 @@ public class Table {
         int result = Objects.hash(name, records);
         result = 31 * result + Arrays.hashCode(columns);
         return result;
+    }
+
+    @Override
+    public int getRowCount() {
+        return this.getRecords().size();
+    }
+
+    @Override
+    public int getColumnCount() {
+        return this.getColumns().length;
+    }
+
+    @Override
+    public String getColumnName(int i) {
+        return this.getColumns()[i].getName();
+    }
+
+    @Override
+    public Class<?> getColumnClass(int i) {
+        return String.class;
+    }
+
+    @Override
+    public boolean isCellEditable(int i, int i1) {
+        return false;
+    }
+
+    @Override
+    public Object getValueAt(int i, int i1) {
+        return this.getRecords().get(i).getData(i1);
+    }
+
+    @Override
+    public void setValueAt(Object o, int i, int i1) {
+        // no cell is editable at the moment
+    }
+
+    @Override
+    public void addTableModelListener(TableModelListener tableModelListener) {
+        // it's not editable yet, so nothing to listen to
+    }
+
+    @Override
+    public void removeTableModelListener(TableModelListener tableModelListener) {
+        // it's not editable yet, so nothing to listen to
     }
 }
