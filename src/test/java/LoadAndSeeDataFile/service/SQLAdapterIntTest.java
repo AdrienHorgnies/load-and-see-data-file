@@ -31,7 +31,7 @@ public class SQLAdapterIntTest {
 
     @Test
     public void testCreateTable_onlyStructure() throws SQLException {
-        SQLAdapter sqlAdapter = new SQLAdapter();
+        SQLAdapter sqlAdapter = new SQLAdapter(connection);
 
         Column[] expectedColumns = {
                 new Column("FIRSTNAME", SQLDataType.VARCHAR, 50),
@@ -40,7 +40,7 @@ public class SQLAdapterIntTest {
         };
         Table table = new Table("STUDENT", expectedColumns);
 
-        sqlAdapter.createTable(connection, table);
+        sqlAdapter.createTable(table);
 
         // checking result
         DatabaseMetaData actualMetaData = connection.getMetaData();
@@ -69,7 +69,7 @@ public class SQLAdapterIntTest {
 
     @Test
     public void testCreateTable_withData() throws SQLException {
-        SQLAdapter sqlAdapter = new SQLAdapter();
+        SQLAdapter sqlAdapter = new SQLAdapter(connection);
 
         Table table = new Table("eleves", new Column[]{
                 new Column("prenom", SQLDataType.VARCHAR, 50),
@@ -97,7 +97,7 @@ public class SQLAdapterIntTest {
         table.addRecord(new Record(new String[] {"Mineta", "Minoru", "16"}));
         table.addRecord(new Record(new String[] {"Yaoyorozu", "Momo", "20"}));
 
-        sqlAdapter.createTable(connection, table);
+        sqlAdapter.createTable(table);
 
         String tableName = table.getName().toUpperCase();
 
@@ -117,7 +117,7 @@ public class SQLAdapterIntTest {
 
     @Test
     public void testRetrieveTable() throws SQLException {
-        SQLAdapter sqlAdapter = new SQLAdapter();
+        SQLAdapter sqlAdapter = new SQLAdapter(connection);
 
         PreparedStatement ddlStatement = connection.prepareStatement("CREATE  TABLE STUDENT (" +
                 "FIRSTNAME VARCHAR(50)," +
@@ -148,7 +148,7 @@ public class SQLAdapterIntTest {
         expected.addRecord(new Record(new String[]{"Ashido", "Mino", "17"}));
         expected.addRecord(new Record(new String[]{"Asui", "Tsuyu", "16"}));
 
-        Table actual = sqlAdapter.retrieveTable(connection, "STUDENT");
+        Table actual = sqlAdapter.retrieveTable("STUDENT");
 
         assertThat(actual).isEqualTo(expected);
     }
