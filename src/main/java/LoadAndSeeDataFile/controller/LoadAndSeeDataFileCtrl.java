@@ -49,7 +49,6 @@ public class LoadAndSeeDataFileCtrl implements ActionListener {
 
             try {
                 Table table = fileParser.parse(file);
-                // todo it doesn't display a header, did I mess up or is it not a feature ?
                 managedView.tableHolder.setModel(table);
                 managedView.tableLabel.setText(TABLE_INDICATOR + table.getName());
             } catch (IOException e) {

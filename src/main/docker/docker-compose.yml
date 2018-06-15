@@ -17,7 +17,6 @@ services:
       default:
         ipv4_address: ${NETWORK_RANGE}.101
 
-
 networks:
   default:
     driver: bridge
