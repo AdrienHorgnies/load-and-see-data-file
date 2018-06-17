@@ -61,7 +61,7 @@ public class FileParser {
                         throw new ColumnFormatException(columnStr);
                     }
 
-                    String name = matcher.group("name");
+                    String name = matcher.group("db.name");
                     SQLDataType type = SQLDataType.valueOf(matcher.group("type").toUpperCase());
                     String sizeStr = matcher.group("size");
 

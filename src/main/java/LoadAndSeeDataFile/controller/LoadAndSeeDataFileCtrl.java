@@ -48,8 +48,8 @@ public class LoadAndSeeDataFileCtrl implements ActionListener {
     private Optional<SQLAdapter> createSqlAdapter() {
         try {
             Class.forName(prop.get("database-driver.name"));
-            String connectionURL = "jdbc:mysql://" + prop.get("host") + ":" + prop.get("port") + "/" + prop.get("name") + "?verifyServerCertificate=false&useSSL=true";
-            Connection connection = DriverManager.getConnection(connectionURL, prop.get("user"), prop.get("password"));
+            String connectionURL = "jdbc:mysql://" + prop.get("db.host") + ":" + prop.get("db.port") + "/" + prop.get("db.name") + "?verifyServerCertificate=false&useSSL=true";
+            Connection connection = DriverManager.getConnection(connectionURL, prop.get("db.user"), prop.get("db.password"));
             return Optional.of(new SQLAdapter(connection));
         } catch (SQLException e) {
             e.printStackTrace();
