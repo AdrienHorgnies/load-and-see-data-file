@@ -9,10 +9,13 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import static LoadAndSeeDataFile.view.LoadAndSeeDataFileView.TABLE_INDICATOR;
 
@@ -36,22 +39,34 @@ public class LoadAndSeeDataFileCtrl implements ActionListener {
         this.managedView = managedView;
         this.fileChooser = new JFileChooser();
         this.fileParser = new FileParser();
-        SQLAdapter sqlAdapter;
+
+        SQLAdapter sqlAdapter = null;
         try {
+            Properties database = new Properties();
+            String fileName = "database.properties";
+            InputStream input = new FileInputStream(fileName);
+
+            database.load(input);
+
+            String host = database.getProperty("host");
+            String port = database.getProperty("port");
+            String name = database.getProperty("name");
+            String user = database.getProperty("user");
+            String password = database.getProperty("password");
+
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String connectionURL = "jdbc:mysql://10.10.0.1/load_and_see_data_file?verifyServerCertificate=false&useSSL=true";
-            String user = "root";
-            String password = "admin";
+            String connectionURL = "jdbc:mysql://" + host + ":" + port + "/" + name + "?verifyServerCertificate=false&useSSL=true";
             Connection connection = DriverManager.getConnection(connectionURL, user, password);
             sqlAdapter = new SQLAdapter(connection);
+        } catch (IOException e) {
+            // todo tell user that we couldn't read user properties
+            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
             managedView.displayError(CONNECTION_OPENING_FAILED_TITLE, CONNECTION_OPENING_FAILED_MESSAGE);
-            sqlAdapter = null;
         } catch (ClassNotFoundException e) {
-            System.err.println("Where is my MySQL JDBC Driver ? Dammit. Find it and add it as a maven dependency in the pom.xml.");
+            System.err.println("MySQL JDBC Driver dependency is missing.");
             e.printStackTrace();
-            sqlAdapter = null;
         }
         this.sqlAdapter = sqlAdapter;
 
