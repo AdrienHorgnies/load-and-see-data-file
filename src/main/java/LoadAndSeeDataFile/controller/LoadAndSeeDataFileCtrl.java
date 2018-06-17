@@ -16,8 +16,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import static LoadAndSeeDataFile.view.LoadAndSeeDataFileView.TABLE_INDICATOR;
-
 public class LoadAndSeeDataFileCtrl implements ActionListener {
 
     private final LoadAndSeeDataFileView managedView;
@@ -85,7 +83,7 @@ public class LoadAndSeeDataFileCtrl implements ActionListener {
                     table = sqlAdapter.retrieveTable(table.getName());
                 }
                 managedView.tableHolder.setModel(table);
-                managedView.tableLabel.setText(TABLE_INDICATOR + table.getName());
+                managedView.tableLabel.setText(prop.get("label.table.prefix") + " " + table.getName());
             } catch (IOException e) {
                 e.printStackTrace();
                 managedView.displayError(prop.get("error.unreadable.title"), prop.get("error.unreadable.message"));
