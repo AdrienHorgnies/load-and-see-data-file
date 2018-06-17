@@ -2,6 +2,7 @@ package LoadAndSeeDataFile.controller;
 
 import LoadAndSeeDataFile.model.Table;
 import LoadAndSeeDataFile.service.FileParser;
+import LoadAndSeeDataFile.service.Prop;
 import LoadAndSeeDataFile.service.SQLAdapter;
 import LoadAndSeeDataFile.view.LoadAndSeeDataFileView;
 
@@ -9,13 +10,10 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 import static LoadAndSeeDataFile.view.LoadAndSeeDataFileView.TABLE_INDICATOR;
 
@@ -42,25 +40,10 @@ public class LoadAndSeeDataFileCtrl implements ActionListener {
 
         SQLAdapter sqlAdapter = null;
         try {
-            Properties database = new Properties();
-            String fileName = "database.properties";
-            InputStream input = new FileInputStream(fileName);
-
-            database.load(input);
-
-            String host = database.getProperty("host");
-            String port = database.getProperty("port");
-            String name = database.getProperty("name");
-            String user = database.getProperty("user");
-            String password = database.getProperty("password");
-
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String connectionURL = "jdbc:mysql://" + host + ":" + port + "/" + name + "?verifyServerCertificate=false&useSSL=true";
-            Connection connection = DriverManager.getConnection(connectionURL, user, password);
+            String connectionURL = "jdbc:mysql://" + Prop.host() + ":" + Prop.port() + "/" + Prop.name() + "?verifyServerCertificate=false&useSSL=true";
+            Connection connection = DriverManager.getConnection(connectionURL, Prop.user(), Prop.password());
             sqlAdapter = new SQLAdapter(connection);
-        } catch (IOException e) {
-            // todo tell user that we couldn't read user properties
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
             managedView.displayError(CONNECTION_OPENING_FAILED_TITLE, CONNECTION_OPENING_FAILED_MESSAGE);
