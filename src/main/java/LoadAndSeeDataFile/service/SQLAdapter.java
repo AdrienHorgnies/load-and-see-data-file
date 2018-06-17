@@ -13,8 +13,14 @@ import java.util.stream.IntStream;
 
 public class SQLAdapter {
 
-    public void createTable(Connection connection, Table table) throws SQLException {
-        PreparedStatement ddlStatement = connection.prepareStatement("CREATE TABLE " + table.getName() + ddlFragment(table.getColumns()) + ";");
+    private final Connection connection;
+
+    public SQLAdapter(Connection connection) {
+        this.connection = connection;
+    }
+
+    public void createTable(Table table) throws SQLException {
+        PreparedStatement ddlStatement = this.connection.prepareStatement("CREATE TABLE " + table.getName() + ddlFragment(table.getColumns()) + ";");
 
         int rowCount = ddlStatement.executeUpdate();
 
@@ -28,7 +34,7 @@ public class SQLAdapter {
 
         int tableWidth = table.getColumns().length;
         int recordCount = table.getRecords().size();
-        PreparedStatement dmlStatement = connection.prepareStatement(insertQueryFrom(table));
+        PreparedStatement dmlStatement = this.connection.prepareStatement(insertQueryFrom(table));
 
         int totalCellCount = recordCount * tableWidth;
         IntStream.range(0, totalCellCount)
@@ -43,8 +49,8 @@ public class SQLAdapter {
         dmlStatement.executeUpdate();
     }
 
-    public Table retrieveTable(Connection connection, String tableName) throws SQLException {
-        ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM " + tableName);
+    public Table retrieveTable(String tableName) throws SQLException {
+        ResultSet resultSet = this.connection.createStatement().executeQuery("SELECT * FROM " + tableName);
 
         ResultSetMetaData metaData = resultSet.getMetaData();
 

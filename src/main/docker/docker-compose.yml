@@ -1,0 +1,28 @@
+version: "2"
+
+services:
+  mysql-db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: load_and_see_data_file
+      MYSQL_ROOT_PASSWORD: admin
+    networks:
+      default:
+        ipv4_address: ${NETWORK_RANGE}.1
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOSTS=mysql-db
+    networks:
+      default:
+        ipv4_address: ${NETWORK_RANGE}.101
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: ${NETWORK_RANGE}.0/24
+        gateway: ${NETWORK_RANGE}.254
+
