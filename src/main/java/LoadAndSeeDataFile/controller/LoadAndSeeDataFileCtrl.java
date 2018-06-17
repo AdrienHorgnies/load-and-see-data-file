@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -37,11 +38,19 @@ public class LoadAndSeeDataFileCtrl implements ActionListener {
         this.fileParser = new FileParser();
         SQLAdapter sqlAdapter;
         try {
-            // todo get a real connection String
-            sqlAdapter = new SQLAdapter(DriverManager.getConnection("blablabla"));
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            String connectionURL = "jdbc:mysql://10.10.0.1/load_and_see_data_file?verifyServerCertificate=false&useSSL=true";
+            String user = "root";
+            String password = "admin";
+            Connection connection = DriverManager.getConnection(connectionURL, user, password);
+            sqlAdapter = new SQLAdapter(connection);
         } catch (SQLException e) {
             e.printStackTrace();
             managedView.displayError(CONNECTION_OPENING_FAILED_TITLE, CONNECTION_OPENING_FAILED_MESSAGE);
+            sqlAdapter = null;
+        } catch (ClassNotFoundException e) {
+            System.err.println("Where is my MySQL JDBC Driver ? Dammit. Find it and add it as a maven dependency in the pom.xml.");
+            e.printStackTrace();
             sqlAdapter = null;
         }
         this.sqlAdapter = sqlAdapter;
@@ -66,9 +75,16 @@ public class LoadAndSeeDataFileCtrl implements ActionListener {
 
             try {
                 Table table = fileParser.parse(file);
+                if (sqlAdapter != null) {
+                    sqlAdapter.createTable(table);
+                    table = sqlAdapter.retrieveTable(table.getName());
+                }
                 managedView.tableHolder.setModel(table);
                 managedView.tableLabel.setText(TABLE_INDICATOR + table.getName());
             } catch (IOException e) {
+                // todo inform view something went wrong
+                e.printStackTrace();
+            } catch (SQLException e) {
                 // todo inform view something went wrong
                 e.printStackTrace();
             }
