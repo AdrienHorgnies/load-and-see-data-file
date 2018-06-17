@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Prop {
+    public static final String UNREADABLE_TITLE = "Properties unreadable";
+    public static final String UNREADABLE_MESSAGE = "Application failed to load properties files. Application won't function properly.";
+
     /**
      * to ensure properties aren't read continuously, they are wrapped inside a singleton
      */
@@ -12,9 +15,13 @@ public class Prop {
     private java.util.Properties prop;
 
     private Prop() throws IOException {
-        try (final InputStream stream = this.getClass().getClassLoader().getResourceAsStream("database.properties")) {
+        try (final InputStream database = this.getClass().getClassLoader().getResourceAsStream("database.properties");
+             final InputStream app = this.getClass().getClassLoader().getResourceAsStream("app.properties");
+             final InputStream i18n = this.getClass().getClassLoader().getResourceAsStream("i18n/en.properties")) {
             prop = new Properties();
-            prop.load(stream);
+            prop.load(database);
+            prop.load(app);
+            prop.load(i18n);
         }
     }
 
