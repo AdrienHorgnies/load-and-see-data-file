@@ -1,48 +1,31 @@
 package LoadAndSeeDataFile.service;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class Prop {
-    private java.util.Properties database;
+    /**
+     * to ensure properties aren't read continuously, they are wrapped inside a singleton
+     */
+    private static Prop instance;
+    private java.util.Properties prop;
 
     private Prop() throws IOException {
-        this.database = new Properties();
-        this.database.load(new FileInputStream("database.properties"));
-    }
-
-    public static String host() {
-        return Singleton.INSTANCE.database.getProperty("host");
-    }
-
-    public static String port() {
-        return Singleton.INSTANCE.database.getProperty("port");
-    }
-
-    public static String name() {
-        return Singleton.INSTANCE.database.getProperty("name");
-    }
-
-    public static String user() {
-        return Singleton.INSTANCE.database.getProperty("user");
-    }
-
-    public static String password() {
-        return Singleton.INSTANCE.database.getProperty("password");
-    }
-
-    private static class Singleton {
-        static final Prop INSTANCE;
-        static {
-            Prop prop;
-            try {
-                prop = new Prop();
-            } catch (IOException e) {
-                e.printStackTrace();
-                prop = null;
-            }
-            INSTANCE = prop;
+        try (final InputStream stream = this.getClass().getClassLoader().getResourceAsStream("database.properties")) {
+            prop = new Properties();
+            prop.load(stream);
         }
+    }
+
+    public static Prop getInstance() throws IOException {
+        if (instance == null) {
+            instance = new Prop();
+        }
+        return instance;
+    }
+
+    public String get(String key) {
+        return instance.prop.getProperty(key);
     }
 }

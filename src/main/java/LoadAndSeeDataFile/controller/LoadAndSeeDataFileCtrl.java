@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -38,11 +39,14 @@ public class LoadAndSeeDataFileCtrl implements ActionListener {
         this.fileChooser = new JFileChooser();
         this.fileParser = new FileParser();
 
+
         SQLAdapter sqlAdapter = null;
         try {
+            Prop prop = Prop.getInstance();
+
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String connectionURL = "jdbc:mysql://" + Prop.host() + ":" + Prop.port() + "/" + Prop.name() + "?verifyServerCertificate=false&useSSL=true";
-            Connection connection = DriverManager.getConnection(connectionURL, Prop.user(), Prop.password());
+            String connectionURL = "jdbc:mysql://" + prop.get("host") + ":" + prop.get("port") + "/" + prop.get("name") + "?verifyServerCertificate=false&useSSL=true";
+            Connection connection = DriverManager.getConnection(connectionURL, prop.get("user"), prop.get("password"));
             sqlAdapter = new SQLAdapter(connection);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,6 +54,11 @@ public class LoadAndSeeDataFileCtrl implements ActionListener {
         } catch (ClassNotFoundException e) {
             System.err.println("MySQL JDBC Driver dependency is missing.");
             e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            // todo
+            e.printStackTrace();
+        } catch (IOException e) {
+            // todo
         }
         this.sqlAdapter = sqlAdapter;
 
