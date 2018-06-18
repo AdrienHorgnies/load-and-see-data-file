@@ -1,7 +1,5 @@
 package LoadAndSeeDataFile.service;
 
-import LoadAndSeeDataFile.service.exceptions.UnsupportedLanguageException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,9 +14,9 @@ public class Prop {
     public static final String UNREADABLE_MESSAGE = "Application failed to load properties files. Application won't function properly.";
 
     private static final List<Locale> SUPPORTED_LANGUAGES = Arrays.asList(Locale.FRENCH, Locale.ENGLISH);
-
     public static final String UNSUPPORTED_LANGUAGE_TITLE = "Unsupported Languages";
     public static final String UNSUPPORTED_LANGUAGE_MESSAGE = "The language you specified isn't supported. English is loaded in place. Please choose from : " + SUPPORTED_LANGUAGES.toString();
+    public static boolean IS_SUPPORTED_LANGUAGE;
     /**
      * to ensure properties aren't read continuously, they are wrapped inside a singleton
      */
@@ -35,6 +33,7 @@ public class Prop {
 
         Locale userLocale = Locale.forLanguageTag(prop.getProperty("interface.language"));
         if (SUPPORTED_LANGUAGES.contains(userLocale)) {
+            IS_SUPPORTED_LANGUAGE = true;
             String languageProperties;
 
             if (userLocale.equals(Locale.FRENCH)) {
@@ -52,7 +51,7 @@ public class Prop {
             try (final InputStreamReader i18n = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("i18n/en.properties"), Charset.forName("UTF-8"))) {
                 prop.load(i18n);
             }
-            throw new UnsupportedLanguageException(prop.getProperty("interface.language"));
+            IS_SUPPORTED_LANGUAGE = false;
         }
     }
 
