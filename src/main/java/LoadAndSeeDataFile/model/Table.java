@@ -14,16 +14,14 @@ public class Table implements TableModel {
     private final List<Record> records;
 
     public Table(String name, Column[] columns) {
-        // todo check that name is a valid MySQL table name.
         this.name = name;
-        // todo check that column name is a valid MySQL name.
         this.columns = columns;
-        // todo check that records are valid regarding to their corresponding type
-        // todo check that records number of cells correspond to their type
         this.records = new ArrayList<>();
     }
 
     public void addRecord(Record record) {
+        // todo check that records are valid regarding to their corresponding type
+        // todo check that records number fits columns number
         this.records.add(record);
     }
 

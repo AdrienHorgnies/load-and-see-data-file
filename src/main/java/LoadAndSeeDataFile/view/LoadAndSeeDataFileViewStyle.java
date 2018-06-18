@@ -31,7 +31,6 @@ class LoadAndSeeDataFileViewStyle {
         return gbc;
     }
 
-    // todo can I make the JTable take up the whole width from here ?
     static GridBagConstraints dataTableGbc() {
         GridBagConstraints gbc = makeBaseGbc();
         gbc.gridx = 0;

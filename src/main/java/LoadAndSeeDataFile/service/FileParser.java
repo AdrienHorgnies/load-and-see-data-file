@@ -76,7 +76,6 @@ public class FileParser {
     }
 
     private Record parseRecord(String contentLine) {
-        // todo it shouldn't be possible to create a Record independently like that as its formatting depends of the Table containing it.
         return new Record(contentLine.split(delimiter));
     }
 }
